@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
-
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 const Movie = (props) => {
-  const { addToFavorites } = props;
+  const { addToFavorites, deleteMovie, hideMovie } = props;
 
   const [movie, setMovie] = useState("");
 
   const { id } = useParams();
-  const { push } = useHistory();
 
   useEffect(() => {
     axios
@@ -22,6 +20,13 @@ const Movie = (props) => {
       });
   }, [id]);
 
+  const handleDelete = () => {
+    deleteMovie(id);
+  };
+
+  const handleHide = () => {
+    hideMovie(id);
+  };
   return (
     <div className="bg-white rounded-md shadow flex-1">
       <div className="p-5 pb-3 border-b border-zinc-200">
@@ -51,7 +56,10 @@ const Movie = (props) => {
       </div>
 
       <div className="px-5 py-3 border-t border-zinc-200 flex justify-end gap-2">
-        <button className="myButton bg-blue-600 hover:bg-blue-500 ">
+        <button
+          onClick={() => addToFavorites(movie)}
+          className="myButton bg-blue-600 hover:bg-blue-500 "
+        >
           Favorilere ekle
         </button>
         <Link
@@ -60,8 +68,19 @@ const Movie = (props) => {
         >
           Edit
         </Link>
-        <button type="button" className="myButton bg-red-600 hover:bg-red-500">
+        <button
+          onClick={handleDelete}
+          type="button"
+          className="myButton bg-red-600 hover:bg-red-500"
+        >
           Sil
+        </button>
+        <button
+          onClick={handleHide}
+          type="button"
+          className="myButton bg-red-600 hover:bg-red-500"
+        >
+          Gizle
         </button>
       </div>
     </div>
